@@ -7,7 +7,7 @@ function App() {
   useEffect(() => {
     // Send GET request to the backend
     axios
-      .get("/api/message")
+      .get("http://backend.default.svc.cluster.local:5000/api/message")
       .then((response) => {
         setMessage(response.data.message);
       })
