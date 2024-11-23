@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const apiUrl = process.env.REACT_APP_BACKEND_URL;
-console.log(apiUrl);
+
+
 
 function App() {
   const [message, setMessage] = useState("");
@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     // Send GET request to the backend
     axios
-      .get(apiUrl)
+      .get("http://backend:5000/api/message")
       .then((response) => {
         setMessage(response.data.message);
       })

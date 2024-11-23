@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx:1.23-alpine
 
 # Copy the custom Nginx configuration file into the container
-# COPY frontend-nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend-nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the built React files to the Nginx directory
 COPY --from=build /app/build /usr/share/nginx/html
