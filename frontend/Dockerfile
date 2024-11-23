@@ -22,7 +22,7 @@ FROM nginx:1.23-alpine
 # Copy the built React files to the Nginx directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose the port Nginx will serve on
+# Expose the port Nginx will serve onn
 EXPOSE 80
 
 # Start Nginx
