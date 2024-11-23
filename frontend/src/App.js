@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     // Send GET request to the backend
     axios
-      .get(`${apiUrl}/api/message`)
+      .get(apiUrl)
       .then((response) => {
         setMessage(response.data.message);
       })
