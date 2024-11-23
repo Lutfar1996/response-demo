@@ -19,12 +19,9 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: lutfar1996/frontend:11
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/usr/sbin/nginx","-s","quit"]
----
+          image: lutfar1996/frontend:13
+          
+
 
 ---
 apiVersion: v1
