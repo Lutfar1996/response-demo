@@ -16,7 +16,10 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: lutfar1996/frontend:7
+          image: lutfar1996/frontend:8
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: "backend:5000"
           ports:
             - containerPort: 80
 ---

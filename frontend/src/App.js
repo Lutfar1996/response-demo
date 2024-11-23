@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const apiUrl = process.env.REACT_APP_BACKEND_URL;
+
 function App() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     // Send GET request to the backend
     axios
-      .get("http://backend.default.svc.cluster.local:5000/api/message")
+      .get(`${apiUrl}/api/message`)
       .then((response) => {
         setMessage(response.data.message);
       })
