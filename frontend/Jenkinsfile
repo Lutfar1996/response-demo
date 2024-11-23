@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+    environment {
+        // AWS_REGION = 'ap-northeast-1'
+        // CLUSTER_NAME = 'EKS_CLOUD'
+        FRONTEND_IMAGE = "lutfar1996/frontend:${BUILD_NUMBER}"  // Set the frontend image tag dynamically
+    }
+    stages {
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Lutfar1996/response-demo.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Ensure you're in the directory where package.json exists
+                    dir('frontend') {
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    // Provide Docker registry credentials and ensure it's wrapped in a block
+                    withDockerRegistry([credentialsId: 'docker', url: 'https://index.docker.io/v1/']) {
+                        dir('frontend') {
+                            // Build Docker image, tag it using Jenkins build number, and push to Docker Hub
+                            sh "docker build  -t ${FRONTEND_IMAGE} ."
+                            // docker build --build-arg REACT_APP_BACKEND_URL=http://backend-service:5001 -t lutfar1996/frontend:29 .
+
+                            sh "docker push ${FRONTEND_IMAGE}"  // Push the tagged image
+                        }
+                    }
+                }
+            }
+        }
+        // stage('Update Kubeconfig for EKS') {
+        //     steps {
+        //         script {
+        //             withAWS(credentials: 'aws-credentials') {
+        //                 // Update the kubeconfig to point to the correct EKS cluster
+        //                 sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${CLUSTER_NAME}"
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Verify Kubeconfig Access') {
+        //     steps {
+        //         script {
+        //             sh 'kubectl get nodes'  // Verify kubectl can access the cluster
+        //         }
+        //     }
+        // }
+        // stage('Deploy to EKS') {
+        //     steps {
+        //         script {
+        //             // Replace image tag in the frontend manifest file with the Jenkins build number
+        //             sh "sed -i 's|lutfar1996/frontend:latest|${FRONTEND_IMAGE}|g' frontend-deployment.yaml"
+        //             // Apply the updated deployment YAML file to the EKS cluster
+        //             sh "kubectl apply -f frontend-deployment.yaml"
+        //         }
+        //     }
+        // }
+       
+    }
+}
