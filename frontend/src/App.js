@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const apiUrl = process.env.REACT_APP_BACKEND_URL;
+console.log(apiUrl);
 
 function App() {
   const [message, setMessage] = useState("");
