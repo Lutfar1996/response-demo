@@ -1,37 +1,40 @@
+---
 apiVersion: apps/v1
 kind: Deployment
-metadata:
-  name: backend-deployment
-  labels:
-    app: backend
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: backend
-  template:
-    metadata:
-      labels:
-        app: backend
-    spec:
-      containers:
-        - name: backend
-          image: lutfar1996/backend:2
-          ports:
-            - containerPort: 5000
-          env:
-            - name: NODE_ENV
-              value: "production"
----
-apiVersion: v1
-kind: Service
 metadata:
   name: backend
 spec:
   selector:
-    app: backend
+    matchLabels:
+      app: hello
+      tier: backend
+      track: stable
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: hello
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: backend
+          image: lutfar1996/backend:1
+          ports:
+            - name: http
+              containerPort: 5000
+---
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello
+spec:
+  selector:
+    app: hello
+    tier: backend
   ports:
     - protocol: TCP
       port: 5000
-      targetPort: 5000
-  type: ClusterIP
+      targetPort: http
