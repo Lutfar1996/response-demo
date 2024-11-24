@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: lutfar1996/frontend:19
+          image: lutfar1996/frontend:20
 
           ports:
             - containerPort: 80
