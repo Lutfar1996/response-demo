@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: backend-deployment
   labels:
     app: backend
 spec:
@@ -16,9 +16,9 @@ spec:
         app: backend
     spec:
       containers:
-        - name: backend
+        - name: backend-container
           image: lutfar1996/backend:2
-          imagePullPolicy: Never
+
           ports:
             - containerPort: 5000
 ---
