@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: lutfar1996/backend:2
+          image: lutfar1996/backend:3
 
           ports:
             - containerPort: 5000
