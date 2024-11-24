@@ -1,31 +1,34 @@
- ### STAGE 1: Build ###
- FROM node:16 as build
+# Use Node.js image to build the React app
+FROM node:16-alpine as build
 
- # Create app directory
- WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /app
 
- # Install app dependencies
- # A wildcard is used to ensure both package.json AND package-lock.json are copied
- # where available (npm@5+)
- COPY package*.json ./
- RUN npm install
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
- # Bundle app source
- COPY . .
+# Install dependencies
+RUN npm install
 
+# Copy the rest of the application code
+COPY . .
 
- RUN npm run build
+# Build the React app
+RUN npm run build
 
 # Use Nginx to serve the built React app
 FROM nginx:1.23-alpine
 
 # Copy the custom Nginx configuration file into the container
-# COPY frontend-nginx.conf /etc/nginx/conf.d/default.conf
-RUN rm -rf /usr/share/nginx/html/* && rm -rf /etc/nginx/conf.d/default.conf && rm -rf /etc/nginx/nginx.conf
-COPY frontend-nginx.conf /etc/nginx
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY frontend-nginx.conf /etc/nginx/conf.d
 
 # Copy the built React files to the Nginx directory
 COPY --from=build /app/build /usr/share/nginx/html
 
- #Optional to mention expose as it will be taken by nginx sever , port 80 wil be taken from nginx server
- EXPOSE 80
+# Expose the port Nginx will serve on
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

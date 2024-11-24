@@ -1,37 +1,43 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: frontend-deployment
+  labels:
+    app: frontend
 spec:
   selector:
     matchLabels:
-      app: hello
-      tier: frontend
-      track: stable
+      app: frontend
   replicas: 1
   template:
     metadata:
+      name: frontend
       labels:
-        app: hello
-        tier: frontend
-        track: stable
+        app: frontend
     spec:
       containers:
-        - name: nginx
-          image: lutfar1996/frontend:17
-
+        - name: frontend
+          image: lutfar1996/frontend:18
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/usr/sbin/nginx", "-s", "quit"]
 ---
-apiVersion: v1
+Version: v1
 kind: Service
 metadata:
-  name: frontend
+  name: frontend-service
+  labels:
+    app: frontend
 spec:
   selector:
-    app: hello
-    tier: frontend
+    app: frontend
   ports:
-    - protocol: "TCP"
+    - name: http
+      protocol: TCP
       port: 80
       targetPort: 80
   type: LoadBalancer
