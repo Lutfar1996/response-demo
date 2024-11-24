@@ -9,7 +9,9 @@ app.use(express.json());
 
 // Route to handle GET request
 app.get("/api/message", (req, res) => {
-  res.json({ message: "Hello from the backend! ! ! ! Reza" });
+  res.json({
+    message: "Hello from the backend!... You can send request .. Thanks ",
+  });
 });
 
 // Start the server
